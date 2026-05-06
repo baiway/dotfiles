@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor swap/backup files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# OS thumbnail caches
+Thumbs.db
+ehthumbs.db
