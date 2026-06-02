@@ -1,0 +1,19 @@
+theme = "nord"
+
+[editor]
+scroll-lines = 1
+mouse = true
+shell = ["bash"]
+bufferline = "always"
+rulers = [90]
+soft-wrap.enable = true
+true-color = true
+
+[editor.statusline]
+left = ["mode", "spinner", "file-name"]
+center = []
+right = ["version-control", "diagnostics", "selections", "position"]
+
+[editor.indent-guides]
+render = true
+character = "|"
