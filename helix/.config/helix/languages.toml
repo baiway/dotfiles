@@ -55,3 +55,4 @@ command = "texlab"
 [language-server.texlab.config.texlab.chktex]
 onOpenAndSave = true
 onEdit = true
+additionalArgs = ["-n1", "-n24"]
