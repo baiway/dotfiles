@@ -13,3 +13,12 @@
 # OS thumbnail caches
 Thumbs.db
 ehthumbs.db
+
+# SSH key material — only ssh/.ssh/config is tracked
+ssh/.ssh/keys/
+ssh/.ssh/known_hosts
+ssh/.ssh/id_*
+ssh/.ssh/*.pub
+
+# Stow per-package ignores (created on demand)
+.stow-local-ignore

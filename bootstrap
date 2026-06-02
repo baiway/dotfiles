@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Idempotent bootstrap for a fresh macOS install. Safe to re-run.
+set -euo pipefail
+
+log() { printf "==> %s\n" "$*"; }
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PACKAGES=(git zsh ssh helix ghostty)
+
+# 1. Xcode Command Line Tools
+if ! xcode-select -p >/dev/null 2>&1; then
+  log "Installing Xcode Command Line Tools — accept the GUI prompt, then re-run this script."
+  xcode-select --install
+  exit 1
+fi
+
+# 2. Homebrew
+if ! command -v brew >/dev/null 2>&1; then
+  log "Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# 3. Install everything from the Brewfile (includes `stow`)
+log "Running brew bundle..."
+brew bundle --file="$DOTFILES_DIR/Brewfile"
+
+# 4. Symlink config packages into $HOME
+log "Stowing packages: ${PACKAGES[*]}"
+cd "$DOTFILES_DIR"
+stow --target="$HOME" --restow "${PACKAGES[@]}"
+
+# 5. Install Python via uv (best-effort; experimental --default flag)
+if command -v uv >/dev/null 2>&1; then
+  log "Installing Python 3.14 via uv..."
+  uv python install 3.14 --default || true
+fi
+
+log "Bootstrap complete. See SETUP.md for remaining manual steps."
