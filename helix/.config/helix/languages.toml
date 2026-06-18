@@ -56,3 +56,19 @@ command = "texlab"
 onOpenAndSave = true
 onEdit = true
 additionalArgs = ["-n1", "-n24"]
+
+########################################################################
+#                             Fortran                                  #
+########################################################################
+
+[language-server.fortls]
+
+[language-server.fortitude]
+command = "fortitude"
+args = ["server", "--preview"]
+
+[[language]]
+name = "fortran"
+file-types = ["f90", "fpp"]
+indent = {tab-width = 2, unit = "  "}
+language-servers = ["fortls", "fortitude"]
