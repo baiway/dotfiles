@@ -65,4 +65,5 @@ cask "claude"      # LLM GUI app. See: https://claude.com
 cask "whatsapp"    # Messaging service. See: https://whatsapp.com/
 cask "proton-pass" # Password manager. See: https://proton.me/pass
 cask "protonvpn"   # VPN. See: https://protonvpn.com/
+brew "thaw"        # Menu bar manager. See: https://github.com/stonerl/Thaw
 cask "proton-mail-bridge" # Use Mail app with Proton https://proton.me/mail/bridge
