@@ -24,6 +24,11 @@ alias tree="eza --tree --colour=auto"
 # Alias `ssh` to get colours over SSH connections
 alias ssh="TERM=xterm-256color ssh"
 
+# fzf key bindings and fuzzy completion. Enables CTRL-R (fuzzy history
+# search), CTRL-T (insert files/dirs), and ALT-C (cd into a directory).
+# See: https://github.com/junegunn/fzf
+source <(fzf --zsh)
+
 # zoxide (smarter `cd`). Must be initialised *last* so its `chpwd` hook
 # isn't displaced by anything sourced afterwards (otherwise its built-in
 # `doctor` check fires on directory change).
