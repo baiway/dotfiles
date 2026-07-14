@@ -32,6 +32,7 @@ ruff              # Python linter. See: https://docs.astral.sh/ruff/
 ttf-jetbrains-mono-nerd  # Ghostty's `font-family`. See: https://www.nerdfonts.com/
 
 # --- GUI ---
-ghostty           # Terminal emulator. See: https://ghostty.org/
-thunderbird       # Email client. See: https://www.thunderbird.net/
-obsidian          # Markdown notes. See: https://obsidian.md/
+ghostty             # Terminal emulator. See: https://ghostty.org/
+thunderbird         # Email client. See: https://www.thunderbird.net/
+obsidian            # Markdown notes. See: https://obsidian.md/
+proton-vpn-gtk-app  # Proton VPN. See: https://protonvpn.com/
