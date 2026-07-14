@@ -1,0 +1,16 @@
+# AUR packages. Installed by `bootstrap-cachyos` via:
+#   shelly aur install <pkgs>
+#
+# Regenerate with either of:
+#   pacman -Qqem      > packages/aur.txt
+#   shelly aur list   > packages/aur.txt
+#
+# NOTE: AUR packages are community-maintained. Read the PKGBUILD before
+# installing — `shelly aur search-pkgbuild <pkg>` prints it — especially for
+# anything that pulls a binary from a third-party URL.
+
+claude-desktop         # repackages Anthropic's official `.deb` verbatim
+zen-browser-bin        # Web browser. See: https://zen-browser.app/
+proton-vpn-gtk-app     # Proton VPN. See: https://protonvpn.com/
+proton-pass-bin        # repackages Proton's official .deb
+protonmail-bridge-core # Required to use Proton Mail in other clients (e.g. Thunderbird)

@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+# Bootstrap a fresh CachyOS install. Idempotent — safe to re-run.
+set -euo pipefail
+
+DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$DOTFILES"
+
+log() { printf '\n\033[1;34m==>\033[0m %s\n' "$*"; }
+
+# Strip comments/blank lines from a package list.
+pkglist() { grep -vE '^\s*(#|$)' "$1" | sed 's/#.*//' | tr -d ' '; }
+
+# --- 1. shelly ---------------------------------------------------------------
+# `shelly` is a modern package manager for Arch Linux designed to be a more user-friendly
+# alternative. It has a CLI and GUI, and interfaces directly with `libalpm`, the same
+# low-level package manager used by `pacman`. Since `pacman` ships with all Arch-based
+# distributions, `shelly` can safely be installed as follows (even though it is currently
+# shipped with CachyOS by default):
+if ! command -v shelly >/dev/null 2>&1; then
+  log "shelly not found — installing it"
+  sudo pacman -S --needed --noconfirm shelly
+fi
+
+# --- 2. official repos -------------------------------------------------------
+log "Installing packages from the official repos"
+# `--upgrade` makes this idempotent: already-installed packages are upgraded
+# rather than treated as an error (the equivalent of pacman's --needed).
+mapfile -t REPO_PKGS < <(pkglist packages/official-repos.txt)
+shelly install --no-confirm --upgrade "${REPO_PKGS[@]}"
+
+# --- 3. AUR ------------------------------------------------------------------
+# `shelly aur install` builds from the AUR directly
+mapfile -t AUR_PKGS < <(pkglist packages/aur.txt)
+
+if ((${#AUR_PKGS[@]})); then
+  log "Reviewing PKGBUILDs for: ${AUR_PKGS[*]}"
+  # Most of these fetch a vendor binary from a third-party URL. Read before you build.
+  # `|| true`: if the pager is quit early (e.g. `q` in less) the upstream
+  # `shelly` gets SIGPIPE, and pipefail + set -e would otherwise abort the run.
+  shelly aur search-pkgbuild "${AUR_PKGS[@]}" | ${PAGER:-less} || true
+
+  # `|| reply=n`: a bare `read` returning non-zero on EOF (Ctrl-D / piped stdin)
+  # would trip set -e before the branch below; default to "no" instead.
+  read -rp $'\nProceed with AUR install? [y/N] ' reply || reply=n
+  if [[ ${reply,,} == y* ]]; then
+    log "Installing AUR packages"
+    shelly aur install --no-confirm "${AUR_PKGS[@]}"
+  else
+    log "Skipped AUR packages. Re-run this script to try again."
+  fi
+fi
+
+# --- 4. Claude Code ----------------------------------------------------------
+# Use official installer as the AUR package disable Claude Code's self-update.
+if ! command -v claude >/dev/null 2>&1; then
+  log "Installing Claude Code"
+  curl -fsSL https://claude.ai/install.sh | bash
+fi
+
+# --- 5. Python ---------------------------------------------------------------
+# Astral's `uv` comes from the "official repos" section above.
+# `|| true`: don't let a hiccup here abort the rest of the bootstrap.
+log "Installing Python 3.14 via uv"
+uv python install 3.14 || true
+
+# --- 6. Helix ----------------------------------------------------------------
+# On Arch the binary is `helix`; via Homebrew it's `hx`. The shared gitconfig
+# sets `editor = hx`, so expose an `hx` pointing at the real binary. Use
+# /usr/local/bin (always on PATH, including the `sh -c` git runs for its editor)
+# rather than ~/.local/bin, which isn't on PATH by default here.
+if command -v helix >/dev/null 2>&1; then
+  log "Linking hx -> helix in /usr/local/bin"
+  sudo ln -sf "$(command -v helix)" /usr/local/bin/hx
+fi
+
+# --- 7. stow -----------------------------------------------------------------
+PACKAGES=(git fish ssh helix ghostty)
+
+# Pre-create ~/.ssh as a real dir (mode 700) so stow symlinks ~/.ssh/config into
+# it rather than folding the whole ~/.ssh into one symlink pointing at the repo.
+# Otherwise SSH keys generated later (per SETUP.md) would land inside the repo.
+# `connections/` holds the ControlPath sockets referenced by ssh/.ssh/config.
+mkdir -p "$HOME/.ssh/connections"
+chmod 700 "$HOME/.ssh"
+
+# Stow refuses to overwrite a real (non-symlink) file, and a fresh CachyOS
+# install ships some of these targets already (notably ~/.config/fish/config.fish).
+# Move any such file aside so stow can take over; the original is preserved as
+# <file>.pre-stow for later inspection. Idempotent: on re-run the targets are
+# already symlinks into this repo, so nothing is moved.
+log "Backing up any pre-existing config files that would block stow"
+for pkg in "${PACKAGES[@]}"; do
+  while IFS= read -r -d '' src; do
+    target="$HOME/${src#"$pkg"/}"
+    if [[ -e $target && ! -L $target ]]; then
+      log "  $target -> $target.pre-stow"
+      mv "$target" "$target.pre-stow"
+    fi
+  done < <(find "$pkg" -type f -print0)
+done
+
+log "Stowing: ${PACKAGES[*]}"
+stow --target="$HOME" --restow "${PACKAGES[@]}"
+
+log "Done. Remaining manual steps are in SETUP.md."

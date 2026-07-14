@@ -1,0 +1,37 @@
+# Official repos (core/extra + CachyOS). Installed by `bootstrap-cachyos` via:
+#   shelly install --no-confirm <pkgs>
+#
+# Regenerate with:
+#   pacman -Qqen > packages/official-repos.txt
+# (Shelly has no documented "explicit, native-only" export yet — `pacman -Qqen`
+# reads the same ALPM database Shelly writes to, so it sees everything either
+# tool installed.)
+
+# --- toolchain needed to build AUR packages ---
+base-devel        # Package group with the compilers/tools `makepkg` needs
+git               # Version control. See: https://git-scm.com/
+
+# --- CLI ---
+helix             # Editor (binary is `helix`, aliased to `hx`). See: https://helix-editor.com/
+stow              # Symlink farm manager. See: https://www.gnu.org/software/stow/
+starship          # Prettier prompt. See: https://starship.rs/
+eza               # Prettier `ls`. See: https://eza.rocks/
+ripgrep           # Faster `grep`. See: https://github.com/burntsushi/ripgrep
+fd                # Faster `find`. See: https://github.com/sharkdp/fd
+fzf               # Fuzzy finder. See: https://github.com/junegunn/fzf
+zoxide            # Smarter `cd`. See: https://github.com/ajeetdsouza/zoxide
+bat               # Prettier `cat`. See: https://github.com/sharkdp/bat
+tealdeer          # More readable `man` pages; provides `tldr` (Rust client). See: https://github.com/tealdeer-rs/tealdeer
+tree              # Useful for copy-pasting plaintext directory structures
+github-cli        # GitHub CLI; provides `gh`. See: https://cli.github.com/
+rsync             # File transfers. See: https://rsync.samba.org/
+uv                # Python dependency management. See: https://docs.astral.sh/uv/
+ruff              # Python linter. See: https://docs.astral.sh/ruff/
+
+# --- Fonts ---
+ttf-jetbrains-mono-nerd  # Ghostty's `font-family`. See: https://www.nerdfonts.com/
+
+# --- GUI ---
+ghostty           # Terminal emulator. See: https://ghostty.org/
+thunderbird       # Email client. See: https://www.thunderbird.net/
+obsidian          # Markdown notes. See: https://obsidian.md/
