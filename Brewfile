@@ -3,6 +3,9 @@
 # Dotfiles management
 brew "stow"     # Symlink farm manager. See: https://www.gnu.org/software/stow/
 
+# Fonts
+cask "font-jetbrains-mono-nerd-font" # Font with ligatures. See: https://www.nerdfonts.com/
+
 # CLI tools
 cask "ghostty"  # Terminal emulator. See: https://ghostty.org/
 brew "helix"    # Editor. See: https://helix-editor.com/
