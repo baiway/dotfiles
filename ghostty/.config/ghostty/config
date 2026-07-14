@@ -1,2 +1,5 @@
 font-family = JetBrainsMono Nerd Font
 font-size = 18
+
+# Machine-specific overwrides
+config-file = ?localconfig
