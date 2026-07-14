@@ -50,6 +50,32 @@ if ((${#AUR_PKGS[@]})); then
   fi
 fi
 
+# --- 3b. Proton Mail Bridge --------------------------------------------------
+# Proton ships an official `PKGBUILD` that repackages their prebuilt `.deb` (no source
+# build; the `.deb` is sha256-pinned inside that `PKGBUILD`). Shelly is currently
+# raising false-positive security issues with the AUR package, so this is just a
+# work-around for now.
+# The PKGBUILD is tiny (~1 KB), so we grab it first, read its version, and only download
+# the large `.deb` and rebuild when it's newer than what's installed (keeps re-runs cheap
+# and idempotent).
+log "Checking Proton Mail Bridge (Proton's official PKGBUILD)"
+bridge_build="$(mktemp -d)"
+if curl -fsSL https://proton.me/download/bridge/PKGBUILD -o "$bridge_build/PKGBUILD"; then
+  # Parse (don't execute) the version out of the freshly fetched PKGBUILD.
+  bridge_ver="$(grep -oP '^pkgver=\K.*' "$bridge_build/PKGBUILD" || true)"
+  bridge_rel="$(grep -oP '^pkgrel=\K.*' "$bridge_build/PKGBUILD" || true)"
+  installed_ver="$(pacman -Q protonmail-bridge-bin 2>/dev/null | awk '{print $2}' || true)"
+  if [[ -n $bridge_ver && "$bridge_ver-$bridge_rel" != "$installed_ver" ]]; then
+    log "Building Proton Mail Bridge $bridge_ver-$bridge_rel (installed: ${installed_ver:-none})"
+    # makepkg refuses to run as root and calls sudo pacman -U itself for -i.
+    ( cd "$bridge_build" && makepkg -si --noconfirm ) \
+      || log "WARNING: protonmail-bridge-bin build failed — re-run to retry"
+  fi
+else
+  log "WARNING: couldn't fetch Proton Mail Bridge PKGBUILD — skipping"
+fi
+rm -rf "$bridge_build"
+
 # --- 4. Claude Code ----------------------------------------------------------
 # Use official installer as the AUR package disable Claude Code's self-update.
 if ! command -v claude >/dev/null 2>&1; then

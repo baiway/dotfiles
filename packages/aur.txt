@@ -11,6 +11,4 @@
 
 claude-desktop         # repackages Anthropic's official `.deb` verbatim
 zen-browser-bin        # Web browser. See: https://zen-browser.app/
-proton-vpn-gtk-app     # Proton VPN. See: https://protonvpn.com/
 proton-pass-bin        # repackages Proton's official .deb
-protonmail-bridge-core # Required to use Proton Mail in other clients (e.g. Thunderbird)
