@@ -15,7 +15,6 @@ git               # Version control. See: https://git-scm.com/
 helix             # Editor (binary is `helix`, aliased to `hx`). See: https://helix-editor.com/
 stow              # Symlink farm manager. See: https://www.gnu.org/software/stow/
 starship          # Prettier prompt. See: https://starship.rs/
-eza               # Prettier `ls`. See: https://eza.rocks/
 ripgrep           # Faster `grep`. See: https://github.com/burntsushi/ripgrep
 fd                # Faster `find`. See: https://github.com/sharkdp/fd
 fzf               # Fuzzy finder. See: https://github.com/junegunn/fzf
