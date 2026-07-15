@@ -4,5 +4,5 @@ if test -f /usr/share/cachyos-fish-config/cachyos-config.fish
 end
 
 # --- my additions ------------------------------------------------------------
-# TODO add analogous lines to initiate `starship`, `zoxide`, set `fzf` keybindings, etc.
-# These are in `.zshrc` but need to be adapted for `config.fish`
+zoxide init --cmd cd fish | source
+starship init fish | source
