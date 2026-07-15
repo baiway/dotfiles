@@ -21,6 +21,7 @@ fd                # Faster `find`. See: https://github.com/sharkdp/fd
 fzf               # Fuzzy finder. See: https://github.com/junegunn/fzf
 zoxide            # Smarter `cd`. See: https://github.com/ajeetdsouza/zoxide
 bat               # Prettier `cat`. See: https://github.com/sharkdp/bat
+jq                # JSON processor (used by bootstrap to read AUR metadata). See: https://jqlang.org/
 tealdeer          # More readable `man` pages; provides `tldr` (Rust client). See: https://github.com/tealdeer-rs/tealdeer
 tree              # Useful for copy-pasting plaintext directory structures
 github-cli        # GitHub CLI; provides `gh`. See: https://cli.github.com/

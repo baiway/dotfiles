@@ -33,20 +33,58 @@ shelly install --no-confirm --upgrade "${REPO_PKGS[@]}"
 mapfile -t AUR_PKGS < <(pkglist packages/aur.txt)
 
 if ((${#AUR_PKGS[@]})); then
-  log "Reviewing PKGBUILDs for: ${AUR_PKGS[*]}"
-  # Most of these fetch a vendor binary from a third-party URL. Read before you build.
-  # `|| true`: if the pager is quit early (e.g. `q` in less) the upstream
-  # `shelly` gets SIGPIPE, and pipefail + set -e would otherwise abort the run.
-  shelly aur search-pkgbuild "${AUR_PKGS[@]}" | ${PAGER:-less} || true
+  log "Fetching AUR PKGBUILDs for: ${AUR_PKGS[*]}"
+  # Fetch PKGBUILD as JSON for each AUR package. Used to check against pre-installed
+  # versions to save unnecessarily downloading pre-installed packages. Also used to
+  # display to the user in review step below.
+  aur_json="$(shelly aur search-pkgbuild "${AUR_PKGS[@]}" --json)"
 
-  # `|| reply=n`: a bare `read` returning non-zero on EOF (Ctrl-D / piped stdin)
-  # would trip set -e before the branch below; default to "no" instead.
-  read -rp $'\nProceed with AUR install? [y/N] ' reply || reply=n
-  if [[ ${reply,,} == y* ]]; then
-    log "Installing AUR packages"
-    shelly aur install --no-confirm "${AUR_PKGS[@]}"
+  AUR_TODO=()
+  for pkg in "${AUR_PKGS[@]}"; do
+    pkgbuild="$(jq -r --arg n "$pkg" '.[] | select(.Name==$n) | .PkgBuild' <<<"$aur_json")"
+    if [[ -z $pkgbuild ]]; then
+      log "  WARNING: no PKGBUILD returned for $pkg — will attempt install anyway"
+      AUR_TODO+=("$pkg"); continue
+    fi
+    want="$(grep -oP '^pkgver=\K.*' <<<"$pkgbuild" | head -1 | tr -d "\"'")"
+    want+="-$(grep -oP '^pkgrel=\K.*' <<<"$pkgbuild" | head -1 | tr -d "\"'")"
+    have="$(pacman -Q "$pkg" 2>/dev/null | awk '{print $2}')"
+    if [[ $want != -* && $want == "$have" ]]; then
+      log "  $pkg $have is up to date — skipping"
+    else
+      AUR_TODO+=("$pkg")
+    fi
+  done
+
+  if ((${#AUR_TODO[@]})); then
+    log "Reviewing PKGBUILDs for: ${AUR_TODO[*]}"
+    # Most of these fetch a vendor binary from a third-party URL. Read before building!
+    # Prefer `bat` (syntax-highlighted, installed from the official repos above) as
+    # the pager; fall back to $PAGER/less if it isn't there yet.
+    if command -v bat >/dev/null 2>&1; then
+      pkgbuild_pager=(bat --language=bash --style=plain --paging=always)
+    else
+      pkgbuild_pager=("${PAGER:-less}")
+    fi
+    # Show the PKGBUILDs under a clear header.
+    # `|| true`: quitting the pager early (e.g. `q` in less) sends SIGPIPE up the
+    # pipe, and pipefail + set -e would otherwise abort the whole run.
+    jq -r --args '
+      .[] | select(.Name as $n | $ARGS.positional | index($n)) |
+      "# ==================== PKGBUILD: \(.Name) ====================\n\n\(.PkgBuild)\n"
+    ' <<<"$aur_json" "${AUR_TODO[@]}" | "${pkgbuild_pager[@]}" || true
+
+    # `|| reply=n`: a bare `read` returning non-zero on EOF (Ctrl-D / piped stdin)
+    # would trip set -e before the branch below; default to "no" instead.
+    read -rp $'\nProceed with AUR install? [y/N] ' reply || reply=n
+    if [[ ${reply,,} == y* ]]; then
+      log "Installing AUR packages"
+      shelly aur install --no-confirm "${AUR_TODO[@]}"
+    else
+      log "Skipped AUR packages. Re-run this script to try again."
+    fi
   else
-    log "Skipped AUR packages. Re-run this script to try again."
+    log "All AUR packages are up to date — nothing to build."
   fi
 fi
 
@@ -70,6 +108,8 @@ if curl -fsSL https://proton.me/download/bridge/PKGBUILD -o "$bridge_build/PKGBU
     # makepkg refuses to run as root and calls sudo pacman -U itself for -i.
     ( cd "$bridge_build" && makepkg -si --noconfirm ) \
       || log "WARNING: protonmail-bridge-bin build failed — re-run to retry"
+  else
+    log "  protonmail-bridge-bin $installed_ver is up to date — skipping"
   fi
 else
   log "WARNING: couldn't fetch Proton Mail Bridge PKGBUILD — skipping"
