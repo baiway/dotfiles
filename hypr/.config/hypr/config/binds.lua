@@ -27,9 +27,6 @@ hl.bind(mainMod .. " + SHIFT + Right",           hl.dsp.window.move({ direction 
 hl.bind(mainMod .. " + SHIFT + Left",            hl.dsp.window.move({ direction = "l" }))
 hl.bind(mainMod .. " + SHIFT + Up",              hl.dsp.window.move({ direction = "u" }))
 hl.bind(mainMod .. " + SHIFT + Down",            hl.dsp.window.move({ direction = "d" }))
-hl.bind(mainMod .. " + SHIFT + 1",               hl.dsp.window.move({ monitor = MONITOR1 }))
-hl.bind(mainMod .. " + SHIFT + 2",               hl.dsp.window.move({ monitor = MONITOR2 }))
-hl.bind(mainMod .. " + SHIFT + 3",               hl.dsp.window.move({ monitor = MONITOR3 }))
 hl.bind(mainMod .. " + SHIFT + mouse_up",        hl.dsp.window.move({ monitor   = "+1" }))
 hl.bind(mainMod .. " + SHIFT + mouse_down",      hl.dsp.window.move({ monitor   = "-1" }))
 hl.bind(mainMod .. " + CONTROL + SHIFT + Right", hl.dsp.window.move({ workspace = "r+1" }))
@@ -37,6 +34,14 @@ hl.bind(mainMod .. " + CONTROL + SHIFT + Left",  hl.dsp.window.move({ workspace 
 for i = 1, NUM_WPM do
     local key = i % 10
     hl.bind(mainMod .. " + SHIFT + CONTROL + " .. key, hl.dsp.window.move({ workspace = "m~" .. i }))
+end
+
+-- Move the active window to a workspace by number. SHIFT follows the window
+-- there; ALT sends it away and keeps you where you are.
+for i = 1, NUM_WPM do
+    local key = i % 10
+    hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i, follow = true }))
+    hl.bind(mainMod .. " + ALT + " .. key,   hl.dsp.window.move({ workspace = i, follow = false }))
 end
 
 -- Move & Resize with mouse
@@ -102,16 +107,11 @@ hl.bind(mainMod .. " + A", hl.dsp.exec_cmd(noctCall .. "panel-toggle control-cen
 ---- WORKSPACES & MONITORS ----
 -------------------------------
 
--- Focus on monitors
-hl.bind(mainMod .. " + 1", hl.dsp.focus({ monitor = MONITOR1 }))
-hl.bind(mainMod .. " + 2", hl.dsp.focus({ monitor = MONITOR2 }))
-hl.bind(mainMod .. " + 3", hl.dsp.focus({ monitor = MONITOR3 }))
-
 -- Focus on workspace number
--- Absolute
+-- Absolute -- these match the pill order shown in the bar
 for i = 1, NUM_WPM do
     local key = i % 10
-    hl.bind(mainMod .. " + TAB + " .. key, hl.dsp.focus({ workspace = i }))
+    hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = i }))
 end
 -- Relative
 for i = 1, NUM_WPM do

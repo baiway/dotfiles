@@ -14,7 +14,7 @@ hl.window_rule({
 
 -- Gaming
 local gamingApps = "^(steam_app.*|gamescope)$"
-local gamingWorkspace = "name:gaming"
+local gamingWorkspace = tostring(GAMING_WORKSPACE)
 
 hl.window_rule({ match = { content = "game" }, workspace = gamingWorkspace })
 hl.window_rule({ match = { class = gamingApps }, workspace = gamingWorkspace })
