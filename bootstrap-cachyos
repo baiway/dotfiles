@@ -151,7 +151,7 @@ fi
 #     rsvg-convert -w $s -h $s zen/.local/share/icons/hicolor/scalable/apps/zen-browser.svg \
 #       -o zen/.local/share/icons/hicolor/${s}x${s}/apps/zen-browser.png
 #   done
-PACKAGES=(git fish ssh helix ghostty zen)
+PACKAGES=(git fish ssh helix ghostty zen hypr)
 
 # Pre-create ~/.ssh as a real dir (mode 700) so stow symlinks ~/.ssh/config into
 # it rather than folding the whole ~/.ssh into one symlink pointing at the repo.
@@ -163,13 +163,21 @@ chmod 700 "$HOME/.ssh"
 # Stow refuses to overwrite a real (non-symlink) file, and a fresh CachyOS
 # install ships some of these targets already (notably ~/.config/fish/config.fish).
 # Move any such file aside so stow can take over; the original is preserved as
-# <file>.pre-stow for later inspection. Idempotent: on re-run the targets are
-# already symlinks into this repo, so nothing is moved.
+# <file>.pre-stow for later inspection.
+#
+# The test is "does this path already resolve into the repo?" rather than
+# "is it a symlink?": when a package's parent dir doesn't exist yet, stow folds
+# it into a single dir symlink (~/.config/hypr -> repo/hypr/.config/hypr), so
+# the files under it are reached through a symlinked *parent* and test as real
+# files. Comparing the resolved path keeps re-runs from moving the repo's own
+# files aside under either layout.
 log "Backing up any pre-existing config files that would block stow"
 for pkg in "${PACKAGES[@]}"; do
   while IFS= read -r -d '' src; do
     target="$HOME/${src#"$pkg"/}"
-    if [[ -e $target && ! -L $target ]]; then
+    [[ -e $target ]] || continue
+    resolved="$(readlink -f "$target")"
+    if [[ $resolved != "$DOTFILES"/* ]]; then
       log "  $target -> $target.pre-stow"
       mv "$target" "$target.pre-stow"
     fi

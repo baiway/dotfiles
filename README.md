@@ -29,7 +29,11 @@ zsh/.zshrc
 ssh/.ssh/config
 helix/.config/helix/{config.toml,languages.toml}
 ghostty/.config/ghostty/config
+hypr/.config/hypr/{hyprland.lua,xdph.conf,config/*.lua}
 ```
+
+Packages are stowed per-platform: `bootstrap-macos` and `bootstrap-cachyos` each carry
+their own `PACKAGES` list, so Linux-only packages like `hypr` stay off macOS.
 
 To add a new tracked config, drop it in a package directory at the path it should occupy in `$HOME`, then re-run `./bootstrap` (or `stow --target="$HOME" --restow <package>`).
 
