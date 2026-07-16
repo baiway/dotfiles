@@ -12,3 +12,4 @@
 claude-desktop         # repackages Anthropic's official `.deb` verbatim
 zen-browser-bin        # Web browser. See: https://zen-browser.app/
 proton-pass-bin        # repackages Proton's official .deb
+sddm-silent-theme      # Login manager theme. See: https://github.com/uiriansan/SilentSDDM
