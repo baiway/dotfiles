@@ -151,7 +151,7 @@ fi
 #     rsvg-convert -w $s -h $s zen/.local/share/icons/hicolor/scalable/apps/zen-browser.svg \
 #       -o zen/.local/share/icons/hicolor/${s}x${s}/apps/zen-browser.png
 #   done
-PACKAGES=(git fish ssh helix ghostty zen hypr)
+PACKAGES=(git fish ssh helix ghostty zen hypr shelly)
 
 # Pre-create ~/.ssh as a real dir (mode 700) so stow symlinks ~/.ssh/config into
 # it rather than folding the whole ~/.ssh into one symlink pointing at the repo.
