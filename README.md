@@ -35,7 +35,23 @@ hypr/.config/hypr/{hyprland.lua,xdph.conf,config/*.lua}
 Packages are stowed per-platform: `bootstrap-macos` and `bootstrap-cachyos` each carry
 their own `PACKAGES` list, so Linux-only packages like `hypr` stay off macOS.
 
-To add a new tracked config, drop it in a package directory at the path it should occupy in `$HOME`, then re-run `./bootstrap` (or `stow --target="$HOME" --restow <package>`).
+### Adding a new config to the repo
+
+To move an existing config (say `~/.config/shelly/config.json`) under version control:
+
+```sh
+cd ~/.dotfiles                                    # Always run stow from here
+mkdir -p shelly/.config/shelly                    # Mirror the path it has in $HOME
+mv ~/.config/shelly/config.json shelly/.config/shelly/
+stow --target="$HOME" shelly                      # Symlinks it back into place
+```
+
+The package's internal tree must mirror where the file lives under `$HOME`: a file
+at `~/.config/shelly/config.json` lives at `shelly/.config/shelly/config.json` in the
+repo. After stowing, `~/.config/shelly/config.json` is a symlink into the repo, so
+`git status` shows the new `shelly/` package. Add it to the relevant bootstrap's
+`PACKAGES` list (`bootstrap-cachyos` and/or `bootstrap-macos`) so a fresh install
+stows it too.
 
 ## Conflict handling
 
