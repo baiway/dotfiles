@@ -1,11 +1,8 @@
 # Official repos (core/extra + CachyOS). Installed by `bootstrap-cachyos` via:
 #   shelly install --no-confirm <pkgs>
 #
-# Regenerate with:
-#   pacman -Qqen > packages/official-repos.txt
-# (Shelly has no documented "explicit, native-only" export yet — `pacman -Qqen`
-# reads the same ALPM database Shelly writes to, so it sees everything either
-# tool installed.)
+# To check this list against installed packages, run `./sync-packages`.
+# It reports drift and only ever appends, so the comments and sections below survive.
 
 # --- toolchain needed to build AUR packages ---
 base-devel        # Package group with the compilers/tools `makepkg` needs
@@ -27,12 +24,195 @@ github-cli        # GitHub CLI; provides `gh`. See: https://cli.github.com/
 rsync             # File transfers. See: https://rsync.samba.org/
 uv                # Python dependency management. See: https://docs.astral.sh/uv/
 ruff              # Python linter. See: https://docs.astral.sh/ruff/
+bash-completion   # Command line completion. See: https://github.com/scop/bash-completion
+btop     # top/htop alternative. See: https://archlinux.org/packages/extra/x86_64/btop/
+glances  # top/htop alternative. See: https://github.com/nicolargo/glances
 
 # --- Fonts ---
 ttf-jetbrains-mono-nerd  # Ghostty's `font-family`. See: https://www.nerdfonts.com/
+noto-fonts
+noto-fonts-cjk
+noto-fonts-emoji
+awesome-terminal-fonts
+cantarell-fontso
+ttf-bitstream-vera
+ttf-dejavu
+ttf-liberation
+ttf-meslo-nerd
+ttf-opensans
 
 # --- GUI ---
+firefox             # Web browser
+zen-browser-bin     # Web browser. See: https://zen-browser.app/
 ghostty             # Terminal emulator. See: https://ghostty.org/
+alacritty           # Terminal emulator
+kitty               # Terminal emulator
 thunderbird         # Email client. See: https://www.thunderbird.net/
 obsidian            # Markdown notes. See: https://obsidian.md/
 proton-vpn-gtk-app  # Proton VPN. See: https://protonvpn.com/
+claude-desktop      # Generative AI client. See: https://claude.ai/
+vlc                 # Media player
+vlc-plugins-all
+discord             # Instant-messaging application 
+
+# --- Core / Bundled with Cachy OS ---
+# TODO structure this list more nicely
+accountsservice     # Allows desktop environments (Hyprland) to query and manipulate user account information. See: https://archlinux.org/packages/extra/x86_64/accountsservice/
+alsa-firmware       # See: https://wiki.archlinux.org/title/Advanced_Linux_Sound_Architecture
+alsa-plugins
+alsa-utils
+base           # Required by Arch Linux. See: https://archlinux.org/packages/core/any/base/
+bind           # DNS stuff. See: https://wiki.archlinux.org/title/BIND
+bluez          # Bluetooth support. https://wiki.archlinux.org/title/Bluetooth
+bluez-hid2hci
+bluez-libs
+bluez-obex
+bluez-utils
+
+cachyos-fish-config
+cachyos-gaming-applications
+cachyos-gaming-meta
+cachyos-hello
+cachyos-hooks
+cachyos-hypr-noctalia
+cachyos-kernel-manager
+cachyos-keyring
+cachyos-micro-settings
+cachyos-mirrorlist
+cachyos-packageinstaller
+cachyos-plymouth-bootanimation
+cachyos-plymouth-theme
+cachyos-rate-mirrors
+cachyos-settings
+cachyos-snapper-support
+cachyos-v3-mirrorlist
+cachyos-v4-mirrorlist
+cachyos-wallpapers
+cachyos-zsh-config
+
+chwd           # CachyOS Hardware Detection. See: https://wiki.cachyos.org/features/chwd/chwd/
+cpupower       # Power-saving tools for processor. See: https://linux.die.net/man/1/cpupower
+cryptsetup     # Setup and manage encrypted storage devices. See: https://gitlab.com/cryptsetup/cryptsetup
+device-mapper  # Component of Linux kernel. See: https://sourceware.org/dm/
+dmraid         # RAID storage
+diffutils      # Contains `diff` and other tools.
+dmidecode      # Extracts human-readable information from hardware
+dnsmasq        # DNS stuff.
+dolphin        # Default file manager of KDE
+duf            # Disk usage/free utility
+btrfs-progs    # Tools for the Btrfs file system
+btrfs-assistant
+dosfstools     # Tools for FAT (File Allocation Table) file systems
+exfatprogs     # Tools for exFAT filesystems
+e2fsprogs      # Tools for ext2, ext3, and ext4 file systems
+f2fs-tools     # Tools for Flash-Friendly File System (F2FS)
+jfsutils       # Tools for the Journaled File System (FJS)
+nfs-utils      # Tools for the Network File System (NFS)
+nilfs-utils    # Tools for the NILFS2 (New Implementation of a Log-structured File System) continuous snapshotting filesystem
+xfsprogs       # Tools for the high-performance XFS journaling file system
+efibootmgr     # Boot manager
+efitools
+egl-wayland        # Enables NVIDIA hardware acceleration
+ethtool            # Query and configure network interface controllers (NICs)
+fastfetch          # Fetches and displays system information
+ffmpegthumbnailer  # Creates thumbnails for video files
+fsarchiver         # Filesystem archiver
+gst-libav          # Contains the encoders, decoders, muxers, and demuxers provided by ffmpeg
+gst-plugin-pipewire
+gst-plugins-bad
+gst-plugins-ugly
+hdparm       # Used to view and modify hardware parameters for SATA, PATA, SAS, and IDE storage devices
+hwdetect     # Script that automatically lists/loads the kernel modules needed to drive devices
+hwinfo       # Probes and displays hardware information
+hyprland     # Tiling Wayland compositor. See: https://hypr.land/
+inetutils    # Collection of networking tools.
+intel-lpmd   # Intel low power mode daemon
+intel-ucode  # Provides microcode updates for Intel processors
+iwd          # Intel wireless daemon
+keyd         # Key remapping daemon for Linux. See: https://github.com/rvaiya/keyd
+less         # Pager
+lib32-nvidia-utils       # NVIDIA driver utilities
+lib32-opencl-nvidia      # OpenCL implementation for NVIDIA
+vulkan-icd-loader        # Bridges Vulkan applications with graphics card drivers
+lib32-vulkan-icd-loader  # Bridges 32-bit Vulkan applications (e.g. games running via Steam or Proton) with 64-bit Vulkan drivers
+libdvdcss                # For accessing DVDs like a block device without having to bother about the decryption (not used)
+libgsf          # I/O abstraction library for dealing with structured file formats
+libopenraw      # Library for parsing and decoding RAW files from digital cameras
+libratbag       # Used to configure input devices, mainly gaming mice
+piper           # GTK application for configuring gaming devices
+libva-nvidia-driver  # Offloads video decoding from CPU to NVIDIA GPUs
+limine               # Bootloader
+limine-mkinitcpio-hook
+limine-snapper-sync
+linux-cachyos
+linux-cachyos-headers
+linux-cachyos-lts
+linux-cachyos-lts-headers
+linux-cachyos-lts-nvidia-open
+linux-cachyos-nvidia-open
+linux-firmware
+logrotate     # Manages system and application logs
+lsb-release   # Displays distribution-specific and Linux Standard Base (LSB) information
+lsscsi        # Queries `/sys` filesystem to display info about attached drives
+lvm2          # Manages disk drives and partitions
+man-db
+man-pages
+mdadm         # Used to manage RAID storage
+meld          # Visual diff and merge tool
+mesa-utils    # Tools to query system's 3D graphics system
+mkinitcpio    # Used by Arch to generate the initial RAM disk (initramfs) image
+modemmanager  # API for communicating with mobile broadband modems
+mtools  # Collection of tools for MS-DOS files
+nano    # Terminal-based editor
+nano-syntax-highlighting
+vim     # Terminal-based editor
+micro   # Spiritual successor of the `nano` text editor
+netctl  # Manages network connections
+networkmanager
+networkmanager-openvpn
+nss-mdns         # Enables hostname resolution by Multicast DNS (mDNS). This allows to connect to e.g. `my-printer.local` instead of an IP address.
+nvidia-settings  # Configure NVIDIA graphics driver
+nvidia-utils     # Userspace components of NVIDIA graphics driver
+opencl-nvidia
+openssh          # Connect to other devices via SSH
+os-prober        # Detects other operating systems and adds to bootloader
+pacman-contrib   # Contributed scripts and tools for the `pacman` package manager
+pavucontrol      # Graphical sound mixer
+pipewire-alsa    # Intercepts applications attempting to use ASLA and routes audio through PipeWire instead
+pipewire-pulse   # Ditto but for PulseAudio
+pkgfile          # Tool for searching files from packages in the official repositories
+plocate          # Faster `locate` (search command)
+plymouth         # Provides a graphical experience during boot
+poppler-glib     # Wrapper around the Poppler PDF rendering library
+power-profiles-daemon  # Manages power consumption
+pv  # Monitor progress of data through a pipeline (progress bars etc.)
+perl
+python
+python-defusedxml
+python-packaging
+realtime-privileges  # Allows users to run multimedia applications with elevated CPU and scheduling priorities. Useful for audiophiles and producers to minimise latency, drop-outs and crackles. I've not touched this
+rebuild-detector     # Scans system after updates to identify AUR and locally-installed packages that were built against older versions of shared libraries and need to be recompiled
+reflector            # Python script that retrieves the latest mirror list, filters the most up-to-date servers by country and protocol, sorts them by download speed, and overwrites `/etc/pacman.d/mirrorlist`
+sddm                 # Simple Desktop Display Manager (login screen)
+sg3_utils  # Low-level utilities that send SCSI commands directly to storage devices
+shelly # Package manager
+smartmontools  # Controls and monitors storage devices using the Self-Monitoring, Analysis, and Reporting Technology (S.M.A.R.T.) system
+s-nail  # Mail processing system
+snapper  # Manages filesystem snapshots
+sof-firmware  # Sound firmware
+strace  # The Linux syscall tracer (used to monitor and tamper with interactions between processes and the Linux kernel)
+sudo
+sysfsutils # Tools to interface with sysfs, a virtual filesystem in Linux
+texinfo  # GNU documentation system
+ufw  # Uncomplicated Firewall
+ufw-extras
+unrar  # Extract `.rar` files
+unzip  # Extract `.zip` files
+usb_modeswitch  # Converts multi-state USB devices (like 3G/4G modems or Wi-Fi dongles) from storage/installation mode to operational mode
+usbutils  # USB utilities
+wget # Fetch files from the web
+which  # Identify location of executables
+wireplumber  # Handles audio routing
+wpa_supplicant  # Handles wireless connections
+xdg-user-dirs  # Handles user directors such as Desktop, Downloads, etc.
+xl2tpd  # VPN daemon
