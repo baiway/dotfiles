@@ -17,7 +17,7 @@ MONITOR1 = "HDMI-A-1" -- Dell U2720Q 27" 4K
 PRIMARY_MONITOR = MONITOR1
 
 -- Workspaces
-NUM_WPM = 4 -- Number of workspaces per monitor (Max 10)
+NUM_WPM = 3 -- Number of workspaces per monitor (Max 10)
 
 -- The gaming workspace, referenced by windowrules.lua and workspaces.lua.
 -- Must be a plain number: "name:gaming" makes Hyprland assign a named-workspace

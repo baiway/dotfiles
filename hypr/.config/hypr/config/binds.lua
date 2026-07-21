@@ -90,9 +90,14 @@ hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(noctCall .. "brightness-down"),
 -------------------
 
 -- Screen Capture
-hl.bind(mainMod .. " + P",     hl.dsp.exec_cmd("hyprpicker -a"))
-hl.bind("Print",               hl.dsp.exec_cmd(noctCall .. "screenshot-region"))
-hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd(noctCall .. "screenshot-fullscreen"))
+-- grim captures, `tee >(wl-copy)` copies to the clipboard and saves to a file
+-- from a single capture. Wrapped in `bash -c` because `>(...)` is process
+-- substitution, which the /bin/sh that Hyprland uses to exec may not support.
+-- `if area=$(slurp)` skips everything (no empty file) when you hit Esc.
+-- SUPER+SHIFT+4 mirrors macOS's region-screenshot shortcut; it's free because
+-- NUM_WPM is 3, so the move-to-workspace loop above never binds 4.
+hl.bind(mainMod .. " + P",         hl.dsp.exec_cmd("hyprpicker -a"))
+hl.bind(mainMod .. " + SHIFT + 4", hl.dsp.exec_cmd([[bash -c 'mkdir -p ~/Pictures/Screenshots && if area=$(slurp); then grim -g "$area" - | tee >(wl-copy) > ~/Pictures/Screenshots/Screenshot-$(date +%F_%T).png && dunstify "Screenshot of the region taken" -t 1000; fi']]))
 
 -- Theming and Wallpaper
 hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd(noctCall .. "panel-toggle wallpaper"))
