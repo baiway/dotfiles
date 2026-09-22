@@ -29,6 +29,9 @@ alias ssh="TERM=xterm-256color ssh"
 # See: https://github.com/junegunn/fzf
 source <(fzf --zsh)
 
+# For compiling GS2
+export GK_SYSTEM=macos-M-series MAKEFLAGS='-j 6 -I Makefiles'
+
 # zoxide (smarter `cd`). Must be initialised *last* so its `chpwd` hook
 # isn't displaced by anything sourced afterwards (otherwise its built-in
 # `doctor` check fires on directory change).
