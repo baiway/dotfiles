@@ -31,10 +31,10 @@ log "Stowing packages: ${PACKAGES[*]}"
 cd "$DOTFILES_DIR"
 stow --target="$HOME" --restow "${PACKAGES[@]}"
 
-# 5. Install Python via uv (best-effort; experimental --default flag)
+# 5. Install Python via uv
 if command -v uv >/dev/null 2>&1; then
   log "Installing Python 3.14 via uv..."
-  uv python install 3.14 --default || true
+  uv python install 3.15 --default || true
 fi
 
 log "Bootstrap complete. See SETUP.md for remaining manual steps."
