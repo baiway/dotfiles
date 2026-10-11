@@ -1,6 +1,7 @@
 # dotfiles
 
-Configuration files and bootstrap scripts for macOS and CachyOS managed with [GNU Stow](https://www.gnu.org/software/stow/).
+Configuration files and bootstrap scripts for macOS and CachyOS managed with
+[GNU Stow](https://www.gnu.org/software/stow/).
 
 ## Bootstrap a fresh computer
 
@@ -9,15 +10,18 @@ git clone https://github.com/baiway/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles && ./bootstrap
 ```
 
-The script is idempotent — re-running is safe. It will:
+The script is idempotent (re-running is safe). It will:
 
 1. Detect the operating system (only macOS and CachyOS supported)
 2. Install a package manager (Homebrew on macOS; Shelly on CachyOS).
-3. Install the listed packages. See [`Brewfile`](Brewfile) for macOS and [`packages`](packages) for CachyOS (both official and AUR).
-4. `stow` each package into `$HOME`, creating symlinks like `~/.zshrc → ~/.dotfiles/zsh/.zshrc`.
-5. Install Python 3.14 via `uv`.
+3. Install the listed packages. See [`Brewfile`](Brewfile) for macOS and
+   [`packages`](packages) for CachyOS (both official and AUR).
+4. `stow` each package into `$HOME`, creating symlinks like
+   `~/.zshrc → ~/.dotfiles/zsh/.zshrc`.
+5. Install Python via `uv`.
 
-Then follow [`SETUP.md`](SETUP.md) for the remaining manual steps (account sign-ins, SSH key generation, theme setting, etc.).
+Then follow [`SETUP.md`](SETUP.md) for the remaining manual steps (account sign-ins,
+SSH key generation, theme setting, etc.).
 
 ## Layout
 
@@ -55,4 +59,7 @@ stows it too.
 
 ## Conflict handling
 
-On the first run, `stow` aborts if a real file already exists at a target path (e.g. a default `~/.zshrc` that Homebrew dropped). Either delete the existing file and re-run, or use `stow --adopt <package>` to absorb it into the repo, then inspect the diff to decide whether to keep the absorbed version.
+On the first run, `stow` aborts if a real file already exists at a target path (e.g. a
+default `~/.zshrc` that Homebrew dropped). Either delete the existing file and re-run,
+or use `stow --adopt <package>` to absorb it into the repo, then inspect the diff to
+decide whether to keep the absorbed version.
