@@ -28,12 +28,30 @@ SSH key generation, theme setting, etc.).
 Each top-level directory is a Stow package whose internal tree mirrors `$HOME`:
 
 ```
-git/.gitconfig
-zsh/.zshrc
-ssh/.ssh/config
-helix/.config/helix/{config.toml,languages.toml}
-ghostty/.config/ghostty/config
-hypr/.config/hypr/{hyprland.lua,xdph.conf,config/*.lua}
+.
+├── git
+│   └── .gitconfig
+├── zsh
+│   └── .zshrc
+├── ssh
+│   └── .ssh
+│       └── config
+├── helix
+│   └── .config
+│       └── helix
+│           ├── config.toml
+│           └── languages.toml
+├── ghostty
+│   └── .config
+│       └── ghostty
+│           └── config
+└── hypr
+    └── .config
+        └── hypr
+            ├── hyprland.lua
+            ├── xdph.conf
+            └── config
+                └── *.lua
 ```
 
 Packages are stowed per-platform: `bootstrap-macos` and `bootstrap-cachyos` each carry
