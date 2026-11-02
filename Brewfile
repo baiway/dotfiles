@@ -22,6 +22,7 @@ brew "gh"       # GitHub CLI. See: https://cli.github.com/
 brew "git"      # Newer version than that shipped with macOS
 brew "rsync"    # File transfers. See: https://linux.die.net/man/1/rsync
 brew "ffmpeg"   # Does all things video. See: https://ffmpeg.org/
+brew "git-deltai"  # Syntax highlighting for `diff`. See: https://github.com/dandavison/delta
 cask "claude-code" # LLM CLI app. See: https://code.claude.com/docs
 
 # Zsh plugins
